@@ -11,6 +11,7 @@ import LoginScreen from "./Screens/Login";
 
 import StationScreen from "./Screens/Admin/Station";
 import StationAddScreen from "./Screens/Admin/Stationadd";
+import StationViewScreen from "./Screens/Admin/Stationview";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -66,6 +67,17 @@ export default function App() {
           component={StationAddScreen}
           options={{
             title: "New Gas Station",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="StationView"
+          component={StationViewScreen}
+          options={{
+            title: "Gas Station",
             headerStyle: {
               backgroundColor: "#560cce",
             },

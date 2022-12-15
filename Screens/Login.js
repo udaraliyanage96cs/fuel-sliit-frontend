@@ -10,8 +10,8 @@ import React, { useState } from "react";
 import { FancyAlert } from "react-native-expo-fancy-alerts";
 
 export default function Login({ navigation }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("admin@gt.com");
+  const [password, setPassword] = useState("123");
   const [visible, setVisible] = React.useState(false);
 
   const signIn = () => {

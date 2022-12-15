@@ -9,17 +9,22 @@ export default function Station({ navigation }) {
     const [loading, setLoading] = useState(true);
     const [stations, setStations] = useState([]);
 
+    const fetchData = () => {
+      console.log("run1");
+      fetch("https://fuel.udarax.me/api/station/")
+      .then((response) => response.json())
+      .then((data) =>{
+          setStations(data['respond']);
+          setLoading(false);
+      });
+    }
     useEffect(() => {
-        fetch("https://fuel.udarax.me/api/station/")
-        .then((response) => response.json())
-        .then((data) =>{
-            setStations(data['respond']);
-            setLoading(false);
-        });
+      fetchData();
+      console.log("run2");
     }, [loading]);
 
     const Item = ({ item }) => (
-        <TouchableOpacity style={styles.box}>
+        <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("StationView",{stationID:item.id})}>
             <View style={styles.row}>
                 <View style={styles.col70}>
                     <Text style={styles.boxTitle}>{item.name}</Text>
@@ -64,7 +69,10 @@ export default function Station({ navigation }) {
                     showsHorizontalScrollIndicator={false}
                     data={stations}
                     renderItem={renderItem}
-                    keyExtractor={item => item.id}/>
+                    keyExtractor={item => item.id}
+                    onRefresh = {()=>fetchData()}
+                    refreshing = {loading}
+                    />
             )}
             
             <FloatButton />
