@@ -7,23 +7,33 @@ import {
   TextInput,
 } from "react-native";
 import React, { useState } from "react";
+import { FancyAlert } from "react-native-expo-fancy-alerts";
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [visible, setVisible] = React.useState(false);
 
   const signIn = () => {
-    //navigation.navigate("Dashboard");
     const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email, password: password})
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email, password: password }),
     };
-    fetch('http://192.168.8.100:8000/api/user/login', requestOptions)
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-    });
+    fetch("https://fuel.udarax.me/api/user/login", requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data["status"] == "success") {
+          navigation.navigate("Dashboard", {
+            user_id: data["user"],
+            role:data["role"],
+          });
+        }else{
+          setVisible(true);
+          alert("Login Faild. Please check your email and password!");
+        }
+      });
   };
 
   return (
@@ -53,13 +63,34 @@ export default function Login({ navigation }) {
       <TouchableOpacity style={styles.button} onPress={signIn}>
         <Text style={styles.buttonText}>Don’t have an account? Sign up</Text>
       </TouchableOpacity>
+      {/* <FancyAlert
+        visible={visible}
+        icon={
+          <View
+            style={{
+              flex: 1,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "red",
+              borderRadius: 50,
+              width: "100%",
+            }}
+          >
+            <Text>🤓</Text>
+          </View>
+        }
+        style={{ backgroundColor: "white" }}
+      >
+        <Text style={{ marginTop: -16, marginBottom: 32 }}>Hello there</Text>
+      </FancyAlert> */}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 30,
+    padding: 20,
     flex: 1,
     justifyContent: "center",
   },
