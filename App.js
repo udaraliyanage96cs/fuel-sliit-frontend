@@ -9,9 +9,13 @@ import HomeScreen from "./Screens/Home";
 import SettingsScreen from "./Screens/Settings";
 import LoginScreen from "./Screens/Login";
 
-import StationScreen from "./Screens/Admin/Station";
-import StationAddScreen from "./Screens/Admin/Stationadd";
-import StationViewScreen from "./Screens/Admin/Stationview";
+import StationScreen from "./Screens/Station/Station";
+import StationAddScreen from "./Screens/Station/Stationadd";
+import StationViewScreen from "./Screens/Station/Stationview";
+import StationEditcreen from "./Screens/Station/Stationedit";
+import FuelScreen from "./Screens/Fuel/Fuel";
+import FuelAddScreen from "./Screens/Fuel/Fueladd";
+import FuelEditScreen from "./Screens/Fuel/Fueledit";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -84,6 +88,51 @@ export default function App() {
             headerTintColor: "#fff",
           }}
         />
+        <Stack.Screen
+          name="StationEdit"
+          component={StationEditcreen}
+          options={{
+            title: "Gas Station",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="Fuel"
+          component={FuelScreen}
+          options={{
+            title: "Fuel Details",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="FuelAdd"
+          component={FuelAddScreen}
+          options={{
+            title: "New Fuel Details",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="FuelEdit"
+          component={FuelEditScreen}
+          options={{
+            title: "Update Fuel Details",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

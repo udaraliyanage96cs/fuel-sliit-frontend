@@ -60,7 +60,7 @@ export default function Login({ navigation }) {
       <TouchableOpacity style={styles.button} onPress={signIn}>
         <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={signIn}>
+      <TouchableOpacity style={[styles.button,{backgroundColor:"#f05a36"}]} onPress={signIn}>
         <Text style={styles.buttonText}>Don’t have an account? Sign up</Text>
       </TouchableOpacity>
       {/* <FancyAlert

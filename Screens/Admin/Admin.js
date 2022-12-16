@@ -17,10 +17,10 @@ export default function Admin({ userid }) {
           <FontAwesome5 name="gas-pump" size={40} color="white" />
           <Text style={styles.boxText}>Gas Stations</Text>
         </TouchableOpacity>
-        <View style={styles.box}>
+        <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("Fuel")}>
           <MaterialCommunityIcons name="fuel" size={45} color="white" />
           <Text style={styles.boxText}>Fuel</Text>
-        </View>
+        </TouchableOpacity>
       </View>
       <View style={styles.row}>
         <View style={styles.box}>
