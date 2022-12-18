@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, StatusBar } from 'react-native'
 import React from 'react'
 
 import Admin from './Admin/Admin'
+import Stationsingle from './Station/Stationsingle'
 
 export default function Home({ route,navigation }) {
   const { userid,role } = route.params;
@@ -12,6 +13,7 @@ export default function Home({ route,navigation }) {
         <StatusBar barStyle = "light-content" hidden = {false} backgroundColor = "#560cce" color="#fff" translucent = {true}/>
         {/* We need to specify what component need to render by user's role */}
         {role == 'admin' && (  <Admin userid = {userid} />) }
+        {role == 'station' && (  <Stationsingle userid = {userid} />) }
     </View>
   )
 }

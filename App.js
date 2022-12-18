@@ -17,6 +17,15 @@ import FuelScreen from "./Screens/Fuel/Fuel";
 import FuelAddScreen from "./Screens/Fuel/Fueladd";
 import FuelEditScreen from "./Screens/Fuel/Fueledit";
 
+import StationSingle from "./Screens/Station/Stationsingle";
+import Gasprices from "./Screens/Station/Gasprices";
+import Gasstock from "./Screens/Station/Gasstock";
+import Gasstockadd from "./Screens/Station/Gasstockadd";
+import Gasstockedit from "./Screens/Station/Gasstockedit";
+
+import Browser from './Screens/Bowser/Browser'
+import Bowseradd from './Screens/Bowser/Bowseradd'
+
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -132,8 +141,75 @@ export default function App() {
             headerTintColor: "#fff",
           }}
         />
+        <Stack.Screen
+          name="GasPrices"
+          component={Gasprices}
+          options={{
+            title: "Gas Prices",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="GasStock"
+          component={Gasstock}
+          options={{
+            title: "Inventory",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="GasStockAdd"
+          component={Gasstockadd}
+          options={{
+            title: "Inventory Add",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="GasStockEdit"
+          component={Gasstockedit}
+          options={{
+            title: "Inventory Update",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
 
+        <Stack.Screen
+          name="Browser"
+          component={Browser}
+          options={{
+            title: "Browsers",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="BowserAdd"
+          component={Bowseradd}
+          options={{
+            title: "New Browser",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
       </Stack.Navigator>
+      
     </NavigationContainer>
   );
 }

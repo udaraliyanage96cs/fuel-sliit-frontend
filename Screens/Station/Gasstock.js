@@ -8,64 +8,67 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { Entypo } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { AntDesign } from '@expo/vector-icons';
 import { useIsFocused } from "@react-navigation/native";
-import { FontAwesome5 } from '@expo/vector-icons';
 
-export default function Browser({ route, navigation }) {
-
+export default function Gasstock({ route, navigation }) {
   const { user_id } = route.params;
   const [loading, setLoading] = useState(true);
-  const [bowser, setBowser] = useState([]);
+  const [stocks, setStocks] = useState([]);
   const isFocused = useIsFocused();
 
   const fetchData = () => {
-    fetch("https://fuel.udarax.me/api/bowser/")
+    fetch("https://fuel.udarax.me/api/station/stocks/" + user_id)
       .then((response) => response.json())
       .then((data) => {
-        setBowser(data["respond"]);
+        setStocks(data["respond"]);
         setLoading(false);
       });
   };
-  
-  useEffect(() => {
-    if (isFocused) {
-      fetchData();
-    }
-  }, [loading, isFocused]);
 
   function FloatButton() {
     return (
       <TouchableOpacity
         style={[styles.floatButton, styles.center]}
-        onPress={() => navigation.navigate("BowserAdd",{
-          user_id:user_id
-        })}
+        onPress={() =>
+          navigation.navigate("GasStockAdd", {
+            user_id: user_id,
+          })
+        }
       >
         <Entypo name="plus" size={30} color="white" />
       </TouchableOpacity>
     );
   }
 
+  useEffect(() => {
+    if (isFocused) {
+      fetchData();
+    }
+  }, [loading, isFocused]);
+
   const Item = ({ item }) => (
     <TouchableOpacity
       style={styles.box}
-      onPress={() => navigation.navigate("BowserEdit", { typeID: item.id })}
+      onPress={() => navigation.navigate("GasStockEdit", { stockID: item.fcid , user_id:user_id  })}
     >
       <View style={styles.row}>
         <View style={styles.col70}>
           <Text style={styles.boxTitle}>{item.name}</Text>
-          <Text style={styles.boxtext}>Capacity : {item.capacity} (L)</Text>
+          <Text style={styles.boxtext}>Initial Volum : {item.ini_qty}</Text>
+          <Text style={styles.boxtext}>Current Volum : {item.current_qty}</Text>
         </View>
         <View style={[styles.col30, styles.center]}>
-          <FontAwesome5 name="truck-moving" size={40} color="black" />
+          <View style={styles.delBox}>
+            <AntDesign name="edit" size={20} color="white" />
+          </View>
         </View>
       </View>
     </TouchableOpacity>
   );
+
   const renderItem = ({ item }) => <Item item={item} />;
 
-  
   return (
     <View style={styles.container}>
       {loading && (
@@ -81,16 +84,16 @@ export default function Browser({ route, navigation }) {
         <FlatList
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          data={bowser}
+          data={stocks}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.fcid}
           onRefresh={() => fetchData()}
           refreshing={loading}
         />
       )}
       <FloatButton />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -100,21 +103,21 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     backgroundColor: "#fff",
     justifyContent: "center",
-    alignItems:'center'
+    alignItems: "center",
   },
-  tinyLogo:{
-    backgroundColor:"#f00",
-    justifyContent:'center',
-    alignItems:'center'
+  tinyLogo: {
+    backgroundColor: "#f00",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  row:{
-    flexDirection:'row'
+  row: {
+    flexDirection: "row",
   },
-  col70:{
-    width:"70%"
+  col70: {
+    width: "70%",
   },
-  col30:{
-    width:"30%"
+  col30: {
+    width: "30%",
   },
   center: {
     alignItems: "center",
@@ -142,5 +145,10 @@ const styles = StyleSheet.create({
   },
   boxtext: {
     color: "#000",
+  },
+  delBox:{
+    backgroundColor:"#f00",
+    borderRadius:50,
+    padding:15
   },
 });
