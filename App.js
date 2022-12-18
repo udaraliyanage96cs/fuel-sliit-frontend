@@ -28,6 +28,11 @@ import Bowseradd from './Screens/Bowser/Bowseradd'
 import Bowserview from './Screens/Bowser/Bowserview'
 import BowserEdit from './Screens/Bowser/Browseredit'
 
+import Registeruser from './Screens/Registeruser'
+import UserStations from './Screens/User/Stations'
+import MyVehicle from './Screens/User/Vehicle'
+import VehicleAdd from './Screens/User/Vehicleadd'
+import Vehicleedit from './Screens/User/Vehicleedit'
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -40,7 +45,7 @@ function Dashboard({ route, navigation }) {
         name="Home"
         initialParams={{ userid: user_id, role: role }}
         options={{
-          title: "Dashboard",
+          title: role.charAt(0).toUpperCase() + role.slice(1) +" Dashboard",
           headerStyle: {
             backgroundColor: "#560cce",
           },
@@ -233,6 +238,62 @@ export default function App() {
             headerTintColor: "#fff",
           }}
         />
+        <Stack.Screen
+          name="RegisterUser"
+          component={Registeruser}
+          options={{
+            headerShown: false,
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="UserStations"
+          component={UserStations}
+          options={{
+            title: "Gas Stations",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="MyVehicle"
+          component={MyVehicle}
+          options={{
+            title: "My Vehicle",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="VehicleAdd"
+          component={VehicleAdd}
+          options={{
+            title: "New Vehicle",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="VehicleEdit"
+          component={Vehicleedit}
+          options={{
+            title: "Update Vehicle",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+
       </Stack.Navigator>
       
     </NavigationContainer>

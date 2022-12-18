@@ -3,6 +3,7 @@ import React from 'react'
 
 import Admin from './Admin/Admin'
 import Stationsingle from './Station/Stationsingle'
+import User from './User/User'
 
 export default function Home({ route,navigation }) {
   const { userid,role } = route.params;
@@ -14,6 +15,7 @@ export default function Home({ route,navigation }) {
         {/* We need to specify what component need to render by user's role */}
         {role == 'admin' && (  <Admin userid = {userid} />) }
         {role == 'station' && (  <Stationsingle userid = {userid} />) }
+        {role == 'user' && (  <User userid = {userid} />) }
     </View>
   )
 }

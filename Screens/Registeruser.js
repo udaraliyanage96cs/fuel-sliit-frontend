@@ -5,33 +5,51 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
+  Alert
 } from "react-native";
 import React, { useState } from "react";
-import { FancyAlert } from "react-native-expo-fancy-alerts";
 
-export default function Login({ navigation }) {
-  const [email, setEmail] = useState("u@gt.com");
-  const [password, setPassword] = useState("123");
-  const [visible, setVisible] = React.useState(false);
+export default function Registeruser({ navigation }) {
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
 
-  const signIn = () => {
+  const redirectPopup = () => {
+    Alert.alert(
+        "Alert!",
+        "Account Successfully Created! Please Login",
+        [
+          {
+            text: "Yes",
+            onPress: () => {
+                navigation.navigate("Login");
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+  }
+  const signup = () => {
+    console.log(name,email,phone,password);
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: email, password: password }),
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        phone: phone,
+        pwd: password,
+      }),
     };
-    fetch("https://fuel.udarax.me/api/user/login", requestOptions)
+    fetch("https://fuel.udarax.me/api/user/create", requestOptions)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        if (data["status"] == "success") {
-          navigation.navigate("Dashboard", {
-            user_id: data["user"],
-            role:data["role"],
-          });
-        }else{
-          setVisible(true);
-          alert("Login Faild. Please check your email and password!");
+        if (data["message"] == "success") {
+            redirectPopup();
+        } else {
+          alert(data["message"]);
         }
       });
   };
@@ -47,9 +65,21 @@ export default function Login({ navigation }) {
       </Text>
       <TextInput
         style={styles.input}
+        onChangeText={setName}
+        value={name}
+        placeholder="Enter name"
+      />
+      <TextInput
+        style={styles.input}
         onChangeText={setEmail}
         value={email}
         placeholder="Enter Email"
+      />
+      <TextInput
+        style={styles.input}
+        onChangeText={setPhone}
+        value={phone}
+        placeholder="Enter Phone"
       />
       <TextInput
         style={styles.input}
@@ -57,33 +87,15 @@ export default function Login({ navigation }) {
         value={password}
         placeholder="Enter Password"
       />
-      <TouchableOpacity style={styles.button} onPress={signIn}>
-        <Text style={styles.buttonText}>Sign In</Text>
+      <TouchableOpacity style={styles.button} onPress={signup}>
+        <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.button,{backgroundColor:"#f05a36"}]} onPress={()=> navigation.navigate("RegisterUser")}>
-        <Text style={styles.buttonText}>Don’t have an account? Sign up</Text>
-      </TouchableOpacity>
-      {/* <FancyAlert
-        visible={visible}
-        icon={
-          <View
-            style={{
-              flex: 1,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor: "red",
-              borderRadius: 50,
-              width: "100%",
-            }}
-          >
-            <Text>🤓</Text>
-          </View>
-        }
-        style={{ backgroundColor: "white" }}
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor: "#f05a36" }]}
+        onPress={() => navigation.navigate("Login")}
       >
-        <Text style={{ marginTop: -16, marginBottom: 32 }}>Hello there</Text>
-      </FancyAlert> */}
+        <Text style={styles.buttonText}>Already have an account ? Sign In</Text>
+      </TouchableOpacity>
     </View>
   );
 }
