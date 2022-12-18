@@ -20,7 +20,8 @@ export default function Browser({ route, navigation }) {
   const isFocused = useIsFocused();
 
   const fetchData = () => {
-    fetch("https://fuel.udarax.me/api/bowser/")
+    console.log(user_id)
+    fetch("https://fuel.udarax.me/api/bowser/"+user_id)
       .then((response) => response.json())
       .then((data) => {
         setBowser(data["respond"]);
@@ -50,7 +51,7 @@ export default function Browser({ route, navigation }) {
   const Item = ({ item }) => (
     <TouchableOpacity
       style={styles.box}
-      onPress={() => navigation.navigate("BowserEdit", { typeID: item.id })}
+      onPress={() => navigation.navigate("BowserView", { bowserID: item.id, user_id:user_id })}
     >
       <View style={styles.row}>
         <View style={styles.col70}>

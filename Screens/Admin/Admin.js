@@ -27,10 +27,10 @@ export default function Admin({ userid }) {
           <Entypo name="users" size={40} color="white" />
           <Text style={styles.boxText}>Users</Text>
         </View>
-        <View style={styles.box}>
+        <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("Browser",{user_id:-1})}>
           <FontAwesome5 name="truck-moving" size={40} color="white" />
           <Text style={styles.boxText}>Bowsers</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );

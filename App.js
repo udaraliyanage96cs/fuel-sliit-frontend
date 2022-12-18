@@ -25,6 +25,9 @@ import Gasstockedit from "./Screens/Station/Gasstockedit";
 
 import Browser from './Screens/Bowser/Browser'
 import Bowseradd from './Screens/Bowser/Bowseradd'
+import Bowserview from './Screens/Bowser/Bowserview'
+import BowserEdit from './Screens/Bowser/Browseredit'
+
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -202,6 +205,28 @@ export default function App() {
           component={Bowseradd}
           options={{
             title: "New Browser",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+         <Stack.Screen
+          name="BowserView"
+          component={Bowserview}
+          options={{
+            title: "Browser",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="BowserEdit"
+          component={BowserEdit}
+          options={{
+            title: "Update Browser",
             headerStyle: {
               backgroundColor: "#560cce",
             },
