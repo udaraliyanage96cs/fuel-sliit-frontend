@@ -33,6 +33,9 @@ import UserStations from './Screens/User/Stations'
 import MyVehicle from './Screens/User/Vehicle'
 import VehicleAdd from './Screens/User/Vehicleadd'
 import Vehicleedit from './Screens/User/Vehicleedit'
+import UserStationsView from './Screens/User/Stationview'
+import Filling from './Screens/User/Filling'
+import FillingStation from './Screens/User/Fillingstation'
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -287,6 +290,39 @@ export default function App() {
           component={Vehicleedit}
           options={{
             title: "Update Vehicle",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="UserStationsView"
+          component={UserStationsView}
+          options={{
+            title: "Stations View",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="Filling"
+          component={Filling}
+          options={{
+            title: "Filling ( Select a Gas Station )",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="FillingStation"
+          component={FillingStation}
+          options={{
+            title: "Filling Station",
             headerStyle: {
               backgroundColor: "#560cce",
             },

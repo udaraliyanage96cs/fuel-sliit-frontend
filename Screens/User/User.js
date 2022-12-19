@@ -11,12 +11,12 @@ export default function User({userid}) {
   const navigation = useNavigation(); 
 
   return (
-    <View>
+    <View style={{justifyContent:'center',flex:1}}>
       <View style={[styles.row,styles.mb5]}>
-        <View style={styles.box}>
+        <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("Filling",{user_id:userid})}>
           <FontAwesome5 name="fill-drip" size={40} color="white" />
-          <Text style={styles.boxText}>Audit</Text>
-        </View>
+          <Text style={styles.boxText}>Filling</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("UserStations")}>
           <FontAwesome5 name="gas-pump" size={40} color="white" />
           <Text style={styles.boxText}>Gas Stations</Text>

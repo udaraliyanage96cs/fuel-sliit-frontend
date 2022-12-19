@@ -1,12 +1,22 @@
-import { StyleSheet, Text, View, TouchableOpacity,FlatList, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+  Image,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import { Entypo } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
-import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
-export default function Stations() {
+export default function Fillig({ route }) {
+
+  const { user_id } = route.params;
+
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [stations, setStations] = useState([]);
@@ -29,11 +39,14 @@ export default function Stations() {
   const Item = ({ item }) => (
     <TouchableOpacity
       style={styles.box}
-      onPress={() => navigation.navigate("UserStationsView", { stationID: item.id })}
+      onPress={() =>
+        navigation.navigate("FillingStation", { stationID: item.id, user_id:user_id })
+      }
     >
       <View style={styles.row}>
         <View style={styles.col70}>
           <Text style={styles.boxTitle}>{item.name}</Text>
+          <Text style={styles.boxtext}>{new Date().toJSON().slice(0, 10)}</Text>
           <Text style={styles.boxtext}>2.6 KM</Text>
           <Text style={styles.boxtext}>{item.availability}</Text>
         </View>
@@ -41,7 +54,6 @@ export default function Stations() {
           <MaterialCommunityIcons name="gas-station" size={50} color="white" />
         </View>
       </View>
-      
     </TouchableOpacity>
   );
 
@@ -60,16 +72,15 @@ export default function Stations() {
 
       {!loading && (
         <View>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-          data={stations}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          onRefresh={() => fetchData()}
-          refreshing={loading}
-        />
-       
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            data={stations}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            onRefresh={() => fetchData()}
+            refreshing={loading}
+          />
         </View>
       )}
     </View>
@@ -78,8 +89,8 @@ export default function Stations() {
 
 const styles = StyleSheet.create({
   container: {
-    padding:20,
-    flex:1
+    padding: 20,
+    flex: 1,
   },
   row: {
     flexDirection: "row",

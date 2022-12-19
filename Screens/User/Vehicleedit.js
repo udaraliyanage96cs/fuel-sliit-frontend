@@ -5,13 +5,13 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
-  Alert
+  Alert,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 
-export default function Vehicleedit({ route,navigation }) {
-  const { vehicleID,user_id } = route.params;
+export default function Vehicleedit({ route, navigation }) {
+  const { vehicleID, user_id } = route.params;
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
@@ -58,30 +58,30 @@ export default function Vehicleedit({ route,navigation }) {
 
   const deleteVehicle = () => {
     Alert.alert(
-        //title
-        "Warning!",
-        //body
-        "Are you sure, Do you really wants to delete this Vehicle?",
-        [
-          {
-            text: "Yes",
-            onPress: () => {
-              fetch("https://fuel.udarax.me/api/user/vehicle/delete/" + vehicleID)
-                .then((response) => response.json())
-                .then((data) => {
-                  console.log(data);
-                  navigation.navigate("MyVehicle",{user_id:user_id});
-                });
-            },
+      //title
+      "Warning!",
+      //body
+      "Are you sure, Do you really wants to delete this Vehicle?",
+      [
+        {
+          text: "Yes",
+          onPress: () => {
+            fetch("https://fuel.udarax.me/api/user/vehicle/delete/" + vehicleID)
+              .then((response) => response.json())
+              .then((data) => {
+                console.log(data);
+                navigation.navigate("MyVehicle", { user_id: user_id });
+              });
           },
-          {
-            text: "No",
-            onPress: () => console.log("No Pressed"),
-            style: "cancel",
-          },
-        ],
-        { cancelable: false }
-      );
+        },
+        {
+          text: "No",
+          onPress: () => console.log("No Pressed"),
+          style: "cancel",
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   const updateVehicle = () => {
@@ -131,6 +131,9 @@ export default function Vehicleedit({ route,navigation }) {
           setOpen={setOpen2}
           setValue={setValue2}
           setItems={setItems2}
+          style={{
+            backgroundColor: "#eee",
+          }}
         />
       </View>
       <View style={styles.mb5}>
@@ -162,6 +165,9 @@ export default function Vehicleedit({ route,navigation }) {
             setOpen={setOpen}
             setValue={setValue}
             setItems={setItems}
+            style={{
+              backgroundColor: "#eee",
+            }}
           />
         </View>
       )}
