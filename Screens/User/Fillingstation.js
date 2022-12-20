@@ -7,13 +7,18 @@ import {
   Image,
 } from "react-native";
 import React, { useState, useEffect } from "react";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function Fillingstation({ route, navigation }) {
-
   const { stationID, user_id } = route.params;
+  const [loading, setLoading] = useState(true);
+  const [queueData, setQueueData] = useState([]);
+  const [queue, setQueue] = useState();
+  const isFocused = useIsFocused();
 
   const joinQueue = () => {
-    console.log(user_id,stationID);
+    setLoading(true);
+    console.log(user_id, stationID);
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -32,14 +37,68 @@ export default function Fillingstation({ route, navigation }) {
         } else {
           alert(data["respond"]);
         }
+        setLoading(false);
+      });
+  };
+  const leftQueue = () => {
+    setLoading(true);
+    fetch("https://fuel.udarax.me/api/user/vehicle/leftqueue/" + queueData[3])
+      .then((response) => response.json())
+      .then((data) => {
+        alert(data["message"]);
+        setQueueData([]);
+        setLoading(false);
+      });
+  }
+  
+  const fetchData = () => {
+    fetch("https://fuel.udarax.me/api/user/vehicle/joinqueue/" + user_id + "/" + stationID)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data["respond"] != null) {
+          setQueueData(Object.values(data["respond"]));
+        }
+        setQueue(data["queue"]);
+        setLoading(false);
+        console.log(queueData);
       });
   };
 
+  useEffect(() => {
+    if (isFocused) {
+      fetchData();
+    }
+  }, [loading, isFocused]);
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button}  onPress={joinQueue}> 
+      <TouchableOpacity style={styles.button} onPress={joinQueue}>
         <Text style={styles.buttonText}>Join Into Queue</Text>
       </TouchableOpacity>
+      {!loading && (
+        <View style={styles.quebox}>
+          <Text style={[styles.text, styles.title]}>
+            Current Queue {new Date().toJSON().slice(0, 10)}{" "}
+          </Text>
+          {queueData.length <= 0 && (
+            <View>
+              <Text style={styles.text}>You have no any Queue Yet</Text>
+              <Text style={styles.text}>Queue : {queue}</Text>
+            </View>
+          )}
+          {(queueData.length > 0 && stationID == queueData[4]) &&  (
+            <View>
+              <Text style={styles.text}>Your Possition : {queueData[2]}</Text>
+              <Text style={styles.text}>Queue : {queue}</Text>
+              <Text style={styles.text}>Queue Type : {queueData[1]}</Text>
+              <Text style={styles.text}>Queue Station : {queueData[0]}</Text>
+              <TouchableOpacity style={[styles.button,styles.mt5]} onPress={leftQueue}>
+                <Text style={styles.buttonText}>Left Queue</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+      )}
     </View>
   );
 }
@@ -51,11 +110,12 @@ const styles = StyleSheet.create({
   mb5: {
     marginBottom: 20,
   },
-  input: {
-    height: 45,
-    marginTop: 5,
-    borderWidth: 1,
-    padding: 10,
+  mt5: {
+    marginTop: 20,
+  },
+  quebox: {
+    backgroundColor: "#00539CFF",
+    padding: 20,
     borderRadius: 5,
   },
   button: {
@@ -67,6 +127,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   buttonText: {
+    color: "#fff",
+  },
+  title: {
+    fontWeight: "700",
+    fontSize: 15,
+  },
+  text: {
     color: "#fff",
   },
 });

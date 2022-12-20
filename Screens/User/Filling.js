@@ -14,7 +14,6 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 export default function Fillig({ route }) {
-
   const { user_id } = route.params;
 
   const navigation = useNavigation();
@@ -22,14 +21,39 @@ export default function Fillig({ route }) {
   const [stations, setStations] = useState([]);
   const isFocused = useIsFocused();
 
+  const [queueData, setQueueData] = useState([]);
+  const [queue, setQueue] = useState();
+
   const fetchData = () => {
     fetch("https://fuel.udarax.me/api/station/")
       .then((response) => response.json())
       .then((data) => {
         setStations(data["respond"]);
+      });
+
+    fetch("https://fuel.udarax.me/api/user/vehicle/getqueue/" + user_id)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data["respond"] != null) {
+          setQueueData(Object.values(data["respond"]));
+        }
+        setQueue(data["queue"]);
         setLoading(false);
       });
   };
+
+  const leftQueue = () => {
+    setLoading(true);
+    fetch("https://fuel.udarax.me/api/user/vehicle/leftqueue/" + queueData[3])
+      .then((response) => response.json())
+      .then((data) => {
+        alert(data["message"]);
+        setQueueData([]);
+        setLoading(false);
+      });
+  }
+  
+
   useEffect(() => {
     if (isFocused) {
       fetchData();
@@ -40,7 +64,10 @@ export default function Fillig({ route }) {
     <TouchableOpacity
       style={styles.box}
       onPress={() =>
-        navigation.navigate("FillingStation", { stationID: item.id, user_id:user_id })
+        navigation.navigate("FillingStation", {
+          stationID: item.id,
+          user_id: user_id,
+        })
       }
     >
       <View style={styles.row}>
@@ -67,6 +94,26 @@ export default function Fillig({ route }) {
             style={styles.tinyLogo}
             source={require("../../assets/gasloading.gif")}
           />
+        </View>
+      )}
+
+      {queueData.length > 0 && (
+        <View style={[styles.quebox,styles.mb5]}>
+          <Text style={[styles.text, styles.title]}>
+            Your Queue {new Date().toJSON().slice(0, 10)}{" "}
+          </Text>
+          <View>
+            <Text style={styles.text}>Your Possition : {queueData[2]}</Text>
+            <Text style={styles.text}>Queue : {queue}</Text>
+            <Text style={styles.text}>Queue Type : {queueData[1]}</Text>
+            <Text style={styles.text}>Queue Station : {queueData[0]}</Text>
+            <TouchableOpacity
+              style={[styles.button, styles.mt5]}
+              onPress={leftQueue}
+            >
+              <Text style={styles.text}>Left Queue</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       )}
 
@@ -128,4 +175,28 @@ const styles = StyleSheet.create({
   boxtext: {
     color: "#000",
   },
+  mt5: {
+    marginTop: 20,
+  },
+  quebox: {
+    backgroundColor: "#00539CFF",
+    padding: 20,
+    borderRadius: 10,
+  },
+  button: {
+    alignItems: "center",
+    backgroundColor: "#f05a36",
+    height: 45,
+    borderRadius: 5,
+    justifyContent: "center",
+    marginBottom: 20,
+  },
+  title: {
+    fontWeight: "700",
+    fontSize: 15,
+  },
+  text: {
+    color: "#fff",
+  },
+  
 });
