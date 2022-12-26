@@ -26,7 +26,7 @@ export default function User({userid}) {
       <View style={[styles.row,styles.mb5]}>
         <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("GasPrices")}>
           <MaterialCommunityIcons name="fuel" size={45} color="white" />
-          <Text style={styles.boxText}>Fuel</Text>
+          <Text style={styles.boxText}>Fuel (Pricing)</Text>
         </TouchableOpacity>
        
         <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("MyVehicle",{user_id:userid})}>
@@ -35,10 +35,10 @@ export default function User({userid}) {
         </TouchableOpacity>
       </View>
       <View style={styles.row}>
-        <View style={styles.box}>
+        <TouchableOpacity style={styles.box}  onPress={() => navigation.navigate("Audit",{user_id:userid,role:'user'})}>
           <AntDesign name="piechart" size={40} color="white" />
           <Text style={styles.boxText}>Audit</Text>
-        </View>
+        </TouchableOpacity>
         <View style={styles.box}>
           <FontAwesome5 name="fill-drip" size={40} color="white" />
           <Text style={styles.boxText}>Audit</Text>

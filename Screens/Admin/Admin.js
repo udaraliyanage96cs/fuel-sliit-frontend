@@ -11,7 +11,7 @@ export default function Admin({ userid }) {
   const navigation = useNavigation(); 
 
   return (
-    <View>
+    <View style={styles.container}>
       <View style={[styles.row,styles.mb5]}>
         <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("Station")}>
           <FontAwesome5 name="gas-pump" size={40} color="white" />
@@ -23,10 +23,10 @@ export default function Admin({ userid }) {
         </TouchableOpacity>
       </View>
       <View style={styles.row}>
-        <View style={styles.box}>
+        <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("Userslist")}>
           <Entypo name="users" size={40} color="white" />
           <Text style={styles.boxText}>Users</Text>
-        </View>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("Browser",{user_id:-1})}>
           <FontAwesome5 name="truck-moving" size={40} color="white" />
           <Text style={styles.boxText}>Bowsers</Text>
@@ -37,6 +37,10 @@ export default function Admin({ userid }) {
 }
 
 const styles = StyleSheet.create({
+  container:{
+    flex:1,
+    justifyContent:'center'
+  },
   row: {
     flexDirection: "row",
     justifyContent: "space-evenly",

@@ -11,7 +11,7 @@ import { FancyAlert } from "react-native-expo-fancy-alerts";
 
 
 export default function Login({ navigation }) {
-  const [email, setEmail] = useState("u@gt.com");
+  const [email, setEmail] = useState("test1@oil.com");
   const [password, setPassword] = useState("123");
   const [visible, setVisible] = React.useState(false);
 

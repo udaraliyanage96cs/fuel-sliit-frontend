@@ -1,27 +1,53 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { Foundation } from "@expo/vector-icons";
-
+import { useIsFocused } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 
 export default function Stationsingle({userid}) {
+
   const navigation = useNavigation();
+
+  const [loading, setLoading] = useState(true);
+  const [queue, setQueue] = useState([]);
+  const isFocused = useIsFocused();
+
+  const fetchData = () => {
+    fetch("https://fuel.udarax.me/api/station/queue/count/" + userid)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data["respond"]);
+        if (data["respond"] == "error") {
+          setQueue([]);
+        } else {
+          setQueue(data["respond"]);
+        }
+        setLoading(false);
+      });
+  }
+
+  useEffect(() => {
+    if(isFocused){ 
+      fetchData();
+    }
+  }, [loading,isFocused]);
+
   return (
     <View style={styles.container}>
       <View style={[styles.row, styles.mb5]}>
         <TouchableOpacity
           style={[styles.box,styles.boxfull,styles.row]}
-          onPress={() => navigation.navigate("GasPrices")}
+          onPress={() => navigation.navigate("Queue",{user_id:userid})}
         >
           <View style={[styles.col4,{justifyContent:'center'}]}>
             <MaterialCommunityIcons name="human-queue" size={45} color="white" />
-            <Text style={styles.boxText}>Queue</Text>
+            <Text style={styles.boxText}>Queue {new Date().toJSON().slice(0, 10)}</Text>
           </View>
           <View style={styles.col6}>
-            <Text style={styles.quetext}>123</Text>
+            <Text style={styles.quetext}>{queue}</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -46,10 +72,10 @@ export default function Stationsingle({userid}) {
           <FontAwesome5 name="truck-moving" size={40} color="white" />
           <Text style={styles.boxText}>Bowsers</Text>
         </TouchableOpacity>
-        <View style={styles.box}>
+        <TouchableOpacity style={styles.box}  onPress={() => navigation.navigate("Audit",{user_id:userid,role:'station'})}>
           <Foundation name="graph-pie" size={40} color="white" />
           <Text style={styles.boxText}>Audits</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );

@@ -22,6 +22,8 @@ import Gasprices from "./Screens/Station/Gasprices";
 import Gasstock from "./Screens/Station/Gasstock";
 import Gasstockadd from "./Screens/Station/Gasstockadd";
 import Gasstockedit from "./Screens/Station/Gasstockedit";
+import Queue from "./Screens/Station/Queue";
+import Fillingqueue from "./Screens/Station/Fillingqueue";
 
 import Browser from './Screens/Bowser/Browser'
 import Bowseradd from './Screens/Bowser/Bowseradd'
@@ -36,6 +38,11 @@ import Vehicleedit from './Screens/User/Vehicleedit'
 import UserStationsView from './Screens/User/Stationview'
 import Filling from './Screens/User/Filling'
 import FillingStation from './Screens/User/Fillingstation'
+
+
+import Audit from './Screens/Audit/Audit'
+import Userslist from './Screens/Admin/Users'
+
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -329,6 +336,51 @@ export default function App() {
             headerTintColor: "#fff",
           }}
         />
+        <Stack.Screen
+          name="Queue"
+          component={Queue}
+          options={{
+            title: "Queue Management",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="FillingQueue"
+          component={Fillingqueue}
+          options={{
+            title: "Filling Queue",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="Audit"
+          component={Audit}
+          options={{
+            title: "Audit Report",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="Userslist"
+          component={Userslist}
+          options={{
+            title: "Users List",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+        
 
       </Stack.Navigator>
       
