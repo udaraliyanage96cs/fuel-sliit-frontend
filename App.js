@@ -29,6 +29,7 @@ import Browser from './Screens/Bowser/Browser'
 import Bowseradd from './Screens/Bowser/Bowseradd'
 import Bowserview from './Screens/Bowser/Bowserview'
 import BowserEdit from './Screens/Bowser/Browseredit'
+import Bowserhome from './Screens/Bowser/Bowserhome'
 
 import Registeruser from './Screens/Registeruser'
 import UserStations from './Screens/User/Stations'
@@ -374,6 +375,17 @@ export default function App() {
           component={Userslist}
           options={{
             title: "Users List",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="BowserHome"
+          component={Bowserhome}
+          options={{
+            title: "Bowser Dashboard",
             headerStyle: {
               backgroundColor: "#560cce",
             },

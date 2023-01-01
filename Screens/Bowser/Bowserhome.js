@@ -7,20 +7,35 @@ import {
   Alert,
   ScrollView,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState,useEffect,useRef } from 'react';
 import MapView, { Marker } from "react-native-maps";
 import { FontAwesome } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, onValue, set , push ,update   } from 'firebase/database';
 import * as Location from 'expo-location';
 
-export default function Bowserview({ route, navigation }) {
-  const { bowserID, user_id } = route.params;
+export default function Bowserview({ userid }) {
+
+  const navigation = useNavigation();
+
+  const [loading, setLoading] = useState(true);
+  const [bowser, setBowser] = useState([]);
+  const isFocused = useIsFocused();
+  const [localLocation, setLocalLocation] = useState([]);
+  const [fbLocation, setFBLocation] = useState([]);
+
+  const [mapRegion, setmapRegion] = useState({
+    latitude: 37.78825,
+    longitude: -122.4324,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  });
 
   const firebaseConfig = {
     apiKey: "AIzaSyDxEmKoQCU12aT8CFPUfHrfXVGDOQOMwRw",
@@ -35,31 +50,19 @@ export default function Bowserview({ route, navigation }) {
   
   initializeApp(firebaseConfig);
 
-  const [loading, setLoading] = useState(true);
-  const [bowser, setBowser] = useState([]);
-  const isFocused = useIsFocused();
-  const [fbLocation, setFBLocation] = useState([]);
-  const [mapRegion, setmapRegion] = useState({
-    latitude: 37.78825,
-    longitude: -122.4324,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  });
-
+  
   const fetchData = () => {
-
     const db = getDatabase();
     const reference = ref(db, 'bowserLocation/'+bowser.id+'/');
 
-    fetch("https://fuel.udarax.me/api/bowser/specific/" + bowserID)
+    fetch("https://fuel.udarax.me/api/bowser/home/" + userid)
       .then((response) => response.json())
       .then((data) => {
-        setBowser(data["respond"]);
-        let location = data["respond"]["curent_location"];
-        console.log(location);
+        setBowser(data["respond"][0]);
+        let location = data["respond"][0]["curent_location"];
         let lat = parseFloat(location.split(":")[0]);
         let lon = parseFloat(location.split(":")[1]);
-
+        console.log("eee");
         setmapRegion({
           latitude: lat,
           longitude: lon,
@@ -82,11 +85,35 @@ export default function Bowserview({ route, navigation }) {
           }
           setLoading(false);
         });
-      });
+    });
+
+   
+
+    (async () => {
+    
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocalLocation(location.coords);
+      // setmapRegion({
+      //   latitude: localLocation.latitude,
+      //   longitude: localLocation.longitude,
+      //   latitudeDelta: 0.0922,
+      //   longitudeDelta: 0.0421,
+      // });
+    })();
+
+   
+
+   
   };
 
   const deleteBowser = () => {
-    console.log(bowserID);
+    console.log(bowser.id);
     Alert.alert(
       //title
       "Warning!",
@@ -96,7 +123,7 @@ export default function Bowserview({ route, navigation }) {
         {
           text: "Yes",
           onPress: () => {
-            fetch("https://fuel.udarax.me/api/bowser/delete/" + bowserID)
+            fetch("https://fuel.udarax.me/api/bowser/delete/" + bowser.id)
               .then((response) => response.json())
               .then((data) => {
                 console.log(data);
@@ -114,14 +141,31 @@ export default function Bowserview({ route, navigation }) {
     );
   };
 
+
+
+
+
+  const shareBowser = () => {
+    let currentdatetime = new Date();
+    let times =  currentdatetime.toTimeString().split(' ')[0].slice(0, -3);
+    let dates =  currentdatetime.toISOString().slice(0, 10);
+    let now = dates + " "+times ;
+    const db = getDatabase();
+    const referenceFuel = ref(db, 'bowserLocation/'+bowser.id);
+    update(referenceFuel, {
+      latitudeDelta:localLocation.latitude,
+      longitudeDelta:localLocation.longitude,
+    });
+  };
+
   useEffect(() => {
     if (isFocused) {
       fetchData();
     }
-  }, [loading, isFocused]);
+  }, [loading]);
 
   return (
-    <View  style={styles.container2}>
+    <View style={styles.container2}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
@@ -138,7 +182,7 @@ export default function Bowserview({ route, navigation }) {
                 <TouchableOpacity
                   style={styles.editbox}
                   onPress={() =>
-                    navigation.navigate("BowserEdit", { bowserID: bowserID })
+                    navigation.navigate("BowserEdit", { bowserID: bowser.id })
                   }
                 >
                   <FontAwesome name="pencil" size={24} color="white" />
@@ -178,7 +222,9 @@ export default function Bowserview({ route, navigation }) {
                   <FontAwesome5 name="truck-moving" size={24} color="black" />
                 </View>
                 <View style={{ marginLeft: 20, justifyContent: "center" }}>
-                  <Text style={{ fontSize: 16 }}>{bowser.vehicle_no} ( Vehicle No )</Text>
+                  <Text style={{ fontSize: 16 }}>
+                    {bowser.vehicle_no} ( Vehicle No )
+                  </Text>
                 </View>
               </View>
               <View style={[styles.row, { marginTop: 20 }]}>
@@ -194,6 +240,12 @@ export default function Bowserview({ route, navigation }) {
                 </View>
               </View>
             </View>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => shareBowser()}
+            >
+              <Text style={styles.buttonText}>Share Location</Text>
+            </TouchableOpacity>
             <TouchableOpacity
               style={styles.button}
               onPress={() => deleteBowser()}
@@ -222,12 +274,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     justifyContent: "center",
     alignItems: "center",
-    flex:1
+    flex: 1,
   },
   container2: {
     padding: 20,
     backgroundColor: "#fff",
-    flex:1
+    flex: 1,
   },
   row: {
     flexDirection: "row",

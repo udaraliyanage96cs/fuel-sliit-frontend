@@ -5,12 +5,14 @@ import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useIsFocused } from "@react-navigation/native";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function Stationview({route,navigation}) {
   const { stationID } = route.params;
 
   const [loading,setLoading] = useState(true);
   const [station,setStation] = useState([]);
+  const [queue,setQueue] = useState();
   const isFocused = useIsFocused();
 
   const [mapRegion, setmapRegion] = useState({
@@ -25,6 +27,7 @@ export default function Stationview({route,navigation}) {
     .then((response) => response.json())
     .then((data) =>{
         setStation(data['respond']);
+        setQueue(data['count'])
         let location = data['respond']['location'];
         console.log(location);
         let lat = parseFloat(location.split(":")[0]);
@@ -64,6 +67,10 @@ export default function Stationview({route,navigation}) {
               <Marker coordinate={mapRegion} title='Marker' />
             </MapView>
             <View>
+              <View style={[styles.row,{marginTop:20}]}>
+                <View ><MaterialCommunityIcons name="human-queue" size={24} color="black" /></View>
+                <View style={{marginLeft:20,justifyContent:'center'}}><Text style={{fontSize:16}}>{queue}</Text></View>
+              </View>
               <View style={[styles.row,{marginTop:20}]}>
                 <View ><FontAwesome5 name="user-secret" size={24} color="black" /></View>
                 <View style={{marginLeft:20,justifyContent:'center'}}><Text style={{fontSize:16}}>{station.uname}</Text></View>
