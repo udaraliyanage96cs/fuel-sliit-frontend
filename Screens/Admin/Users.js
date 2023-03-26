@@ -28,6 +28,8 @@ import {
     useEffect(() => {
       if (isFocused) {
         fetchData();
+        console.log(users);
+        console.log(users.length);
       }
     }, [loading, isFocused]);
   
@@ -60,7 +62,7 @@ import {
             />
           </View>
         )}
-  
+        {users.length ==0 && <Text style={{fontSize:20}}>No Data</Text>}
         {!loading && (
           <FlatList
             showsVerticalScrollIndicator={false}

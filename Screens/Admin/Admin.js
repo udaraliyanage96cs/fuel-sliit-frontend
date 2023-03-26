@@ -6,7 +6,7 @@ import { Entypo } from '@expo/vector-icons';
 
 import { useNavigation } from '@react-navigation/native';
 
-export default function Admin({ userid }) {
+export default function Admin({ userid,role }) {
 
   const navigation = useNavigation(); 
 
@@ -27,7 +27,7 @@ export default function Admin({ userid }) {
           <Entypo name="users" size={40} color="white" />
           <Text style={styles.boxText}>Users</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("Browser",{user_id:-1})}>
+        <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("Browser",{user_id:-1,role:role})}>
           <FontAwesome5 name="truck-moving" size={40} color="white" />
           <Text style={styles.boxText}>Bowsers</Text>
         </TouchableOpacity>

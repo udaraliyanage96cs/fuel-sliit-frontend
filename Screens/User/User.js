@@ -39,10 +39,7 @@ export default function User({userid}) {
           <AntDesign name="piechart" size={40} color="white" />
           <Text style={styles.boxText}>Audit</Text>
         </TouchableOpacity>
-        <View style={styles.box}>
-          <FontAwesome5 name="fill-drip" size={40} color="white" />
-          <Text style={styles.boxText}>Audit</Text>
-        </View>
+        
       </View>
     </View>
   )

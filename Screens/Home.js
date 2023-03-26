@@ -14,7 +14,7 @@ export default function Home({ route,navigation }) {
     <View  style={{ flex: 1,alignContent:'center'}}>
         <StatusBar barStyle = "light-content" hidden = {false} backgroundColor = "#560cce" color="#fff" translucent = {true}/>
         {/* We need to specify what component need to render by user's role */}
-        {role == 'admin' && (  <Admin userid = {userid} />) }
+        {role == 'admin' && (  <Admin userid = {userid} role = "admin" />) }
         {role == 'station' && (  <Stationsingle userid = {userid} />) }
         {role == 'user' && (  <User userid = {userid} />) }
         {role == 'bowser' && (  <BowserHome userid = {userid} />) }

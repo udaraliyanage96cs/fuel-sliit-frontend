@@ -14,13 +14,13 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 export default function Browser({ route, navigation }) {
 
-  const { user_id } = route.params;
+  const { user_id,role } = route.params;
   const [loading, setLoading] = useState(true);
   const [bowser, setBowser] = useState([]);
   const isFocused = useIsFocused();
 
   const fetchData = () => {
-    console.log(user_id)
+    console.log(user_id,role)
     fetch("https://fuel.udarax.me/api/bowser/"+user_id)
       .then((response) => response.json())
       .then((data) => {
@@ -90,7 +90,7 @@ export default function Browser({ route, navigation }) {
           refreshing={loading}
         />
       )}
-      <FloatButton />
+      {role != 'admin' && <FloatButton />}
     </View>
   )
 }
