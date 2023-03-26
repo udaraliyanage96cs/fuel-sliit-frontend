@@ -101,7 +101,8 @@ export default function Fillig({ route }) {
         <View style={styles.col70}>
           <Text style={styles.boxTitle}>{item.name}</Text>
           <Text style={styles.boxtext}>{new Date().toJSON().slice(0, 10)}</Text>
-          <Text style={styles.boxtext}>{item.distance} Km</Text>
+          <Text style={styles.boxtext}>Straight Distance {item.distance} Km</Text>
+          <Text style={styles.boxtext}>Route Distance {item.api_distance}</Text>
           {item.queue != null && <Text style={styles.boxtext}>Queue {item.queue}</Text>}
           {item.capacity != null && <Text style={styles.boxtext}>Capatity {item.capacity}</Text>}
           <Text style={styles.boxtext}>{item.availability}</Text>
