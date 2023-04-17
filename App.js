@@ -25,25 +25,24 @@ import Gasstockedit from "./Screens/Station/Gasstockedit";
 import Queue from "./Screens/Station/Queue";
 import Fillingqueue from "./Screens/Station/Fillingqueue";
 
-import Browser from './Screens/Bowser/Browser'
-import Bowseradd from './Screens/Bowser/Bowseradd'
-import Bowserview from './Screens/Bowser/Bowserview'
-import BowserEdit from './Screens/Bowser/Browseredit'
-import Bowserhome from './Screens/Bowser/Bowserhome'
+import Browser from "./Screens/Bowser/Browser";
+import Bowseradd from "./Screens/Bowser/Bowseradd";
+import Bowserview from "./Screens/Bowser/Bowserview";
+import BowserEdit from "./Screens/Bowser/Browseredit";
+import Bowserhome from "./Screens/Bowser/Bowserhome";
 
-import Registeruser from './Screens/Registeruser'
-import UserStations from './Screens/User/Stations'
-import MyVehicle from './Screens/User/Vehicle'
-import VehicleAdd from './Screens/User/Vehicleadd'
-import Vehicleedit from './Screens/User/Vehicleedit'
-import UserStationsView from './Screens/User/Stationview'
-import Filling from './Screens/User/Filling'
-import FillingStation from './Screens/User/Fillingstation'
+import Registeruser from "./Screens/Registeruser";
+import UserStations from "./Screens/User/Stations";
+import MyVehicle from "./Screens/User/Vehicle";
+import VehicleAdd from "./Screens/User/Vehicleadd";
+import Vehicleedit from "./Screens/User/Vehicleedit";
+import UserStationsView from "./Screens/User/Stationview";
+import Filling from "./Screens/User/Filling";
+import FillingStation from "./Screens/User/Fillingstation";
+import BowserUserView from "./Screens/User/BowserUserView";
 
-
-import Audit from './Screens/Audit/Audit'
-import Userslist from './Screens/Admin/Users'
-
+import Audit from "./Screens/Audit/Audit";
+import Userslist from "./Screens/Admin/Users";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -56,7 +55,7 @@ function Dashboard({ route, navigation }) {
         name="Home"
         initialParams={{ userid: user_id, role: role }}
         options={{
-          title: role.charAt(0).toUpperCase() + role.slice(1) +" Dashboard",
+          title: role.charAt(0).toUpperCase() + role.slice(1) + " Dashboard",
           headerStyle: {
             backgroundColor: "#560cce",
           },
@@ -227,7 +226,7 @@ export default function App() {
             headerTintColor: "#fff",
           }}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="BowserView"
           component={Bowserview}
           options={{
@@ -392,10 +391,18 @@ export default function App() {
             headerTintColor: "#fff",
           }}
         />
-        
-
+        <Stack.Screen
+          name="BowserUserView"
+          component={BowserUserView}
+          options={{
+            title: "Bowser View",
+            headerStyle: {
+              backgroundColor: "#560cce",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
       </Stack.Navigator>
-      
     </NavigationContainer>
   );
 }

@@ -1,18 +1,26 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native'
-import React , { useState, useEffect } from 'react'
-import MapView, { Marker } from 'react-native-maps';
-import { FontAwesome } from '@expo/vector-icons';
-import { FontAwesome5 } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
+import React, { useState, useEffect } from "react";
+import MapView, { Marker } from "react-native-maps";
+import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-export default function Stationview({route,navigation}) {
+export default function Stationview({ route, navigation }) {
   const { stationID } = route.params;
 
-  const [loading,setLoading] = useState(true);
-  const [station,setStation] = useState([]);
-  const [queue,setQueue] = useState();
+  const [loading, setLoading] = useState(true);
+  const [station, setStation] = useState([]);
+  const [queue, setQueue] = useState();
+  const [bowserId, setBowserId] = useState(0);
   const isFocused = useIsFocused();
 
   const [mapRegion, setmapRegion] = useState({
@@ -23,13 +31,20 @@ export default function Stationview({route,navigation}) {
   });
 
   const fetchData = () => {
-    fetch("https://fuel.udarax.me/api/station/"+stationID)
-    .then((response) => response.json())
-    .then((data) =>{
-        setStation(data['respond']);
-        setQueue(data['count'])
-        let location = data['respond']['location'];
-        console.log(location);
+    console.log("aaaa");
+    fetch("https://fuel.udarax.me/api/station/" + stationID)
+      .then((response) => response.json())
+      .then((data) => {
+        setStation(data["respond"]);
+        setQueue(data["count"]);
+        let location = data["respond"]["location"];
+        if (
+          data["respond"]["bowsers"] != null &&
+          data["respond"]["bowsers"] != "" &&
+          data["respond"]["bowsers"] != []
+        ) {
+          setBowserId(data["respond"]["bowsers"][0]["id"]);
+        }
         let lat = parseFloat(location.split(":")[0]);
         let lon = parseFloat(location.split(":")[1]);
 
@@ -40,127 +55,169 @@ export default function Stationview({route,navigation}) {
           longitudeDelta: 0.0421,
         });
         setLoading(false);
-    });
-  }
+      });
+  };
 
-  useEffect(()=>{
-    if(isFocused){ 
+  useEffect(() => {
+    if (isFocused) {
       fetchData();
     }
-  },[loading,isFocused]);
-
+  }, [loading, isFocused]);
 
   return (
     <View style={styles.container2}>
       {!loading && (
         <View>
-            <View style={styles.row}>
-              <View style={styles.col7}>
-                <View style={[styles.row,styles.center]}>
-                  <Text style={styles.title}>{station.name}</Text>
-                  {station.availability == "open" && (<View style={styles.online}></View>)}
-                  {station.availability != "open" && (<View style={styles.offline}></View>)}
-                </View>
+          <View style={styles.row}>
+            <View style={styles.col7}>
+              <View style={[styles.row, styles.center]}>
+                <Text style={styles.title}>{station.name}</Text>
+                {station.availability == "open" && (
+                  <View style={styles.online}></View>
+                )}
+                {station.availability != "open" && (
+                  <View style={styles.offline}></View>
+                )}
               </View>
             </View>
-            <MapView style={styles.map}  region={mapRegion} >
-              <Marker coordinate={mapRegion} title='Marker' />
-            </MapView>
-            <View>
-              <View style={[styles.row,{marginTop:20}]}>
-                <View ><MaterialCommunityIcons name="human-queue" size={24} color="black" /></View>
-                <View style={{marginLeft:20,justifyContent:'center'}}><Text style={{fontSize:16}}>{queue}</Text></View>
+          </View>
+          <MapView style={styles.map} region={mapRegion}>
+            <Marker coordinate={mapRegion} title="Marker" />
+          </MapView>
+          <View>
+            <View style={[styles.row, { marginTop: 20 }]}>
+              <View>
+                <MaterialCommunityIcons
+                  name="human-queue"
+                  size={24}
+                  color="black"
+                />
               </View>
-              <View style={[styles.row,{marginTop:20}]}>
-                <View ><FontAwesome5 name="user-secret" size={24} color="black" /></View>
-                <View style={{marginLeft:20,justifyContent:'center'}}><Text style={{fontSize:16}}>{station.uname}</Text></View>
-              </View>
-              <View style={[styles.row,{marginTop:20}]}>
-                <View ><MaterialIcons name="email" size={24} color="black" /></View>
-                <View style={{marginLeft:20,justifyContent:'center'}}><Text style={{fontSize:16}}>{station.email}</Text></View>
-              </View>
-              <View style={[styles.row,{marginTop:20}]}>
-                <View ><FontAwesome name="phone-square" size={24} color="black" /></View>
-                <View style={{marginLeft:20,justifyContent:'center'}}><Text style={{fontSize:16}}>{station.phone}</Text></View>
+              <View style={{ marginLeft: 20, justifyContent: "center" }}>
+                <Text style={{ fontSize: 16 }}>{queue}</Text>
               </View>
             </View>
+            <View style={[styles.row, { marginTop: 20 }]}>
+              <View>
+                <FontAwesome5 name="user-secret" size={24} color="black" />
+              </View>
+              <View style={{ marginLeft: 20, justifyContent: "center" }}>
+                <Text style={{ fontSize: 16 }}>{station.uname}</Text>
+              </View>
+            </View>
+            <View style={[styles.row, { marginTop: 20 }]}>
+              <View>
+                <MaterialIcons name="email" size={24} color="black" />
+              </View>
+              <View style={{ marginLeft: 20, justifyContent: "center" }}>
+                <Text style={{ fontSize: 16 }}>{station.email}</Text>
+              </View>
+            </View>
+            <View style={[styles.row, { marginTop: 20 }]}>
+              <View>
+                <FontAwesome name="phone-square" size={24} color="black" />
+              </View>
+              <View style={{ marginLeft: 20, justifyContent: "center" }}>
+                <Text style={{ fontSize: 16 }}>{station.phone}</Text>
+              </View>
+            </View>
+            {bowserId == 0 && (
+              <TouchableOpacity style={styles.button}>
+                <Text>No Bowser Assigned</Text>
+              </TouchableOpacity>
+            )}
+            {bowserId != 0 && (
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() =>
+                  navigation.navigate("BowserUserView", {
+                    bowserID: bowserId ?? 0,
+                  })
+                }
+              >
+                <Text style={styles.buttonText}>Track Bowser Location</Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
       )}
-      
-      { loading && (
-          <View style={styles.container}>
-              <Image style={styles.tinyLogo} source={require("../../assets/gasloading.gif")} />
-          </View>
+
+      {loading && (
+        <View style={styles.container}>
+          <Image
+            style={styles.tinyLogo}
+            source={require("../../assets/gasloading.gif")}
+          />
+        </View>
       )}
-     
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
-  container:{
-    flex:1,
-    padding:20,
-    backgroundColor:"#fff",
-    justifyContent:'center',
-    alignItems:'center'
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  container2:{
-    flex:1,
-    padding:20,
-    backgroundColor:"#fff",
+  container2: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: "#fff",
   },
-  row:{
-    flexDirection:'row'
+  row: {
+    flexDirection: "row",
   },
-  col7:{
-    width:"70%",
-    justifyContent:'center'
+  col7: {
+    width: "70%",
+    justifyContent: "center",
   },
-  col3:{
-    width:"30%",
-    alignItems:'flex-end',
-    justifyContent:'center'
+  col3: {
+    width: "30%",
+    alignItems: "flex-end",
+    justifyContent: "center",
   },
-  col7only:{
-    width:"70%",
+  col7only: {
+    width: "70%",
   },
-  col3only:{
-    width:"30%",
+  col3only: {
+    width: "30%",
   },
-  editbox:{
-    width:40,
-    height:40,
-    backgroundColor:"#f05a36",
-    borderRadius:10,
-    justifyContent:'center',
-    alignItems:'center'
+  editbox: {
+    width: 40,
+    height: 40,
+    backgroundColor: "#f05a36",
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  title:{
-    fontSize:20,
-    fontWeight:"700",
+  title: {
+    fontSize: 20,
+    fontWeight: "700",
   },
   map: {
-    width: '100%',
-    marginTop:20,
+    width: "100%",
+    marginTop: 20,
     height: 400,
   },
-  online:{
-    width:15,
-    height:15,
-    borderRadius:50,
-    backgroundColor:"#0f0",
-    marginLeft:10
+  online: {
+    width: 15,
+    height: 15,
+    borderRadius: 50,
+    backgroundColor: "#0f0",
+    marginLeft: 10,
   },
-  offline:{
-    width:15,
-    height:15,
-    borderRadius:50,
-    backgroundColor:"#f00",
-    marginLeft:10
+  offline: {
+    width: 15,
+    height: 15,
+    borderRadius: 50,
+    backgroundColor: "#f00",
+    marginLeft: 10,
   },
-  center:{
-    alignItems:'center',
+  center: {
+    alignItems: "center",
   },
   button: {
     alignItems: "center",
@@ -173,4 +230,4 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
   },
-})
+});
