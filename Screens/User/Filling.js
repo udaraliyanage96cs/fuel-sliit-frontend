@@ -70,6 +70,7 @@ export default function Fillig({ route }) {
   };
 
   useEffect(() => {
+    console.log("this");
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
